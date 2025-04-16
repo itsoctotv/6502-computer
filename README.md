@@ -8,3 +8,7 @@ For the EEPROM Programmer (because they cost an arm and a leg) I built the Ardui
     
 For monitoring the I/O lines etc. of the 6502 I use a Arduino Mega programmed as a monitor device [here](6502-monitor/).    
 
+For the clock I currently use the [555 style clock](https://eater.net/schematics/clock.png) but later I will be using a 1MHz oscillator clock   
+
+_some pics/references can be found [here](docs/misc/)_  
+ 
