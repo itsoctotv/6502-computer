@@ -1,4 +1,4 @@
-# 6502-computer  
+## 6502-computer  
 ---
 Building a 6502 retro style computer  
 Mainly with the documentation/schematics and instruction videos of [Ben Eater](https://www.youtube.com/@BenEater)  
