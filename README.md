@@ -12,4 +12,4 @@ For the clock I currently use the [555 style clock](https://eater.net/schematics
 
 _some pics/references can be found [here](docs/misc/)_  
 
-*WIP* 
+**WIP**   
