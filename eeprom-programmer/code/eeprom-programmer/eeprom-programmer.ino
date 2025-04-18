@@ -6,6 +6,16 @@
 #define WRITE_EN 13
 
 #define EEPROM_SIZE 32768
+#include "firmware.h"
+
+/*
+currently the compiled firmware is being hexdumped and the contents are copied 
+into the firmware file which gets flashed onto the arduino the problem with that is 
+the arduino nano has a total flash size of 30720 bytes and about 6000bytes are used by the program
+but the EEPROM has a size of 32768 bytes that means that only about 14000bytes are usable for EEPROM programming
+right now it is just a work around the goal is to have a external micro sd card module and connect it to the arduino 
+which allows full EEPROM firmware storage and different versions of firmware (i currently don't have a micro sd card module still WIP)
+*/  
 /*
  * Output the address bits and outputEnable signal using shift registers.
  */
@@ -52,7 +62,7 @@ void writeEEPROM(int address, byte data) {
   digitalWrite(WRITE_EN, LOW);
   delayMicroseconds(1);
   digitalWrite(WRITE_EN, HIGH);
-  delay(10);
+  delay(15);
 }
 
 
@@ -78,7 +88,7 @@ void printContents() {
 
 // 4-bit hex decoder for common anode 7-segment display
 //byte data[] = { 0x81, 0xcf, 0x92, 0x86, 0xcc, 0xa4, 0xa0, 0x8f, 0x80, 0x84, 0x88, 0xe0, 0xb1, 0xc2, 0xb0, 0xb8 };
-byte data[]={0xea, 0x4c, 0x01,0x02,0x03,0x04};
+//byte data[]={0xea, 0x4c, 0x01,0x02,0x03,0x04};
 // 4-bit hex decoder for common cathode 7-segment display
 // byte data[] = { 0x7e, 0x30, 0x6d, 0x79, 0x33, 0x5b, 0x5f, 0x70, 0x7f, 0x7b, 0x77, 0x1f, 0x4e, 0x3d, 0x4f, 0x47 };
 
@@ -97,10 +107,25 @@ void eraseEEPROM(){
 
 void writeSingleBytes(){
   writeEEPROM(0xfffc, 0x00);
-  writeEEPROM(0xfffd, 0x10);
+  writeEEPROM(0xfffd, 0x00);
 }
 
+void writeFile(){
+  Serial.print("Firmware size: ");
+  Serial.println(sizeof(FIRMWARE));
 
+  for(int addr = 0; addr < sizeof(FIRMWARE); addr++){
+    writeEEPROM(addr, FIRMWARE[addr]);
+    if(addr % 64 == 0){
+      Serial.print(".");
+
+    }
+  }
+  Serial.println("Finished writing to EEPROM");
+
+
+
+}
 void setup() {
 
   pinMode(A1, OUTPUT);
@@ -112,7 +137,7 @@ void setup() {
   digitalWrite(WRITE_EN, HIGH);
   pinMode(WRITE_EN, OUTPUT);
   Serial.begin(57600);
-  Serial.println("1 = Erase whole EEPROM (will take 5minutes)\n2 = write a single bytes\n3 = Read EEPROM\n4 = Exit");
+  Serial.println("1 = Erase whole EEPROM (will take 5minutes)\n2 = write a single bytes\n3 = Read EEPROM\n4 = Write file\n5 = Exit");
 
   while(Serial.available() == 0){
 
@@ -137,6 +162,11 @@ void setup() {
 
       break;
     case 4:
+      Serial.println("writing firmware file...");
+      writeFile();
+      Serial.println("Done.");
+      break;
+    case 5:
       Serial.println("Aborting");
       break;
     }
