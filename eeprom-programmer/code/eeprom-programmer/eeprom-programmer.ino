@@ -93,12 +93,18 @@ void printContents() {
 // byte data[] = { 0x7e, 0x30, 0x6d, 0x79, 0x33, 0x5b, 0x5f, 0x70, 0x7f, 0x7b, 0x77, 0x1f, 0x4e, 0x3d, 0x4f, 0x47 };
 
 void eraseEEPROM(){
-  for (int address = 0; address < EEPROM_SIZE; address += 1) {
+  for (int address = 0; address < EEPROM_SIZE-1; address += 1) {
     writeEEPROM(address, 0xff);
+    
+    writeEEPROM(address, 0xea);
 
     if (address % 64 == 0) {
       Serial.print(".");
       Serial.println(address);
+      /*if(address == EEPROM_SIZE){
+      
+        break;
+      }*/
 
     }
   }
@@ -107,7 +113,8 @@ void eraseEEPROM(){
 
 void writeSingleBytes(){
   writeEEPROM(0xfffc, 0x00);
-  writeEEPROM(0xfffd, 0x00);
+  writeEEPROM(0xfffd, 0x80);
+  
 }
 
 void writeFile(){
@@ -115,6 +122,8 @@ void writeFile(){
   Serial.println(sizeof(FIRMWARE));
 
   for(int addr = 0; addr < sizeof(FIRMWARE); addr++){
+    writeEEPROM(addr, 0xff);
+    delay(1);
     writeEEPROM(addr, FIRMWARE[addr]);
     if(addr % 64 == 0){
       Serial.print(".");
