@@ -112,8 +112,10 @@ void eraseEEPROM(){
 }
 
 void writeSingleBytes(){
-  writeEEPROM(0xfffc, 0x00);
-  writeEEPROM(0xfffd, 0x80);
+  writeEEPROM(0x7ffc, 0xff);
+  writeEEPROM(0x7ffd, 0xff);
+  writeEEPROM(0x7ffc, 0x00);
+  writeEEPROM(0x7ffd, 0x80);
   
 }
 
