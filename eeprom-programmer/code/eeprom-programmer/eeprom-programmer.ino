@@ -82,6 +82,23 @@ byte data[]={0xea, 0x4c, 0x01,0x02,0x03,0x04};
 // 4-bit hex decoder for common cathode 7-segment display
 // byte data[] = { 0x7e, 0x30, 0x6d, 0x79, 0x33, 0x5b, 0x5f, 0x70, 0x7f, 0x7b, 0x77, 0x1f, 0x4e, 0x3d, 0x4f, 0x47 };
 
+void eraseEEPROM(){
+  for (int address = 0; address < EEPROM_SIZE; address += 1) {
+    writeEEPROM(address, 0xff);
+
+    if (address % 64 == 0) {
+      Serial.print(".");
+      Serial.println(address);
+
+    }
+  }
+  Serial.println(" done");
+}
+
+void writeSingleBytes(){
+  writeEEPROM(0xfffc, 0x00);
+  writeEEPROM(0xfffd, 0x10);
+}
 
 
 void setup() {
@@ -95,58 +112,35 @@ void setup() {
   digitalWrite(WRITE_EN, HIGH);
   pinMode(WRITE_EN, OUTPUT);
   Serial.begin(57600);
-/*
-  // Erase entire EEPROM
-  Serial.print("Erasing EEPROM");
-  for (int address = 0; address < EEPROM_SIZE-1; address += 1){
-    writeEEPROM(address, 0xff);
+  Serial.println("1 = Erase whole EEPROM (will take 5minutes)\n2 = write a single bytes\n3 = Read EEPROM\n4 = Exit");
 
-    if (address % 64 == 0) {
-      Serial.print(" . ");
-      Serial.println(address);
-    }
+  while(Serial.available() == 0){
+
   }
-  Serial.println(" done");
-*/
+  int choice = Serial.parseInt();
+  switch(choice){
+    case 1:
+      Serial.println("Erasing whole EEPROM...");
+      eraseEEPROM();
+      Serial.println("Done.");
+      break;
+    case 2:
+      Serial.println("Write single bytes...");
+      writeSingleBytes();
+      Serial.println("Done.");
 
+      break;
+    case 3:
+      Serial.println("Read whole EEPROM contents...");
+      printContents();
+      Serial.println("Done.");
 
-
-  // write entire EEPROM with single byte
-  Serial.print("Writing EEPROM single byte");
-  for (int address = 0; address < EEPROM_SIZE-1; address += 1) {
-    writeEEPROM(address, 0xea);
-
-    if (address % 64 == 0) {
-      Serial.print(".");
-      Serial.println(address);
-
+      break;
+    case 4:
+      Serial.println("Aborting");
+      break;
     }
-  }
-  Serial.println(" done");
 
-
-/*
-  // Program data bytes
-  Serial.print("Programming EEPROM");
-  for (int address = 0; address < sizeof(data); address += 1) {
-    writeEEPROM(address, data[address]);
-    if (address % 64 == 0) {
-      Serial.print(".");
-    }
-  }
-  Serial.println(" done");
-
-*/
- 
- 
- /* writeEEPROM(0xfffc, 0x00);
-  writeEEPROM(0xfffd, 0x10);
-  
-  writeEEPROM(0x0010, 0xea);
-*/
-  // Read and print out the contents of the EERPROM
-  Serial.println("Reading EEPROM");
-  printContents();
 }
 
 
