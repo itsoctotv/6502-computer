@@ -1,4 +1,10 @@
 # Arduino based EEPROM Programmer
+
+
+[Currently using this seperate EEPROM Programmer project (which also allows for file writing)](https://github.com/erikvanzijst/eeprom)
+
+
+
 suitable for the AT28C256 EEPROM (possibly its derivitives)  
 credits to [here](https://github.com/beneater/eeprom-programmer)
 still WIP working on:  

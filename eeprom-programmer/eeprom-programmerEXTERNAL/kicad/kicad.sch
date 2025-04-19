@@ -1,0 +1,499 @@
+EESchema Schematic File Version 4
+LIBS:kicad-cache
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "AT28C256 EEPROM Programmer"
+Date "2019-05-13"
+Rev "v01"
+Comp ""
+Comment1 ""
+Comment2 "creativecommons.com/licenses/by/4.0"
+Comment3 "License: CC BY 4.0"
+Comment4 "Author: Erik van Zijst"
+$EndDescr
+$Comp
+L 74xx:74HC595 U1
+U 1 1 5CDA843E
+P 2675 2450
+F 0 "U1" H 2425 3000 50  0000 C CNN
+F 1 "74HC595" H 2875 1800 50  0000 C CNN
+F 2 "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" H 2675 2450 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/sn74hc595.pdf" H 2675 2450 50  0001 C CNN
+	1    2675 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74xx:74HC595 U2
+U 1 1 5CDAB5A8
+P 2675 4550
+F 0 "U2" H 2425 5100 50  0000 C CNN
+F 1 "74HC595" H 2875 3900 50  0000 C CNN
+F 2 "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" H 2675 4550 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/sn74hc595.pdf" H 2675 4550 50  0001 C CNN
+	1    2675 4550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D1
+U 1 1 5CDB68C5
+P 6850 2500
+F 0 "D1" V 6889 2383 50  0000 R CNN
+F 1 "Green" V 6798 2383 50  0000 R CNN
+F 2 "LED_THT:LED_D5.0mm" H 6850 2500 50  0001 C CNN
+F 3 "~" H 6850 2500 50  0001 C CNN
+	1    6850 2500
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 5CDB8E90
+P 6450 2500
+F 0 "R1" V 6243 2500 50  0000 C CNN
+F 1 "470R" V 6334 2500 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 6380 2500 50  0001 C CNN
+F 3 "~" H 6450 2500 50  0001 C CNN
+	1    6450 2500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7000 2500 7150 2500
+Wire Wire Line
+	2675 3150 2675 3250
+Wire Wire Line
+	2675 3750 2675 3850
+Wire Wire Line
+	2675 5250 2675 5400
+Wire Wire Line
+	2275 4350 2075 4350
+Wire Wire Line
+	2075 4350 2075 2250
+Wire Wire Line
+	2075 2250 2275 2250
+Wire Wire Line
+	2275 4450 2025 4450
+Wire Wire Line
+	2025 4450 2025 2350
+Wire Wire Line
+	2025 2350 2275 2350
+Wire Wire Line
+	6600 2500 6700 2500
+Wire Wire Line
+	3075 2950 3075 3500
+Wire Wire Line
+	3075 3500 2275 3500
+Wire Wire Line
+	2275 3500 2275 4150
+Wire Wire Line
+	3075 2050 4175 2050
+Wire Wire Line
+	3075 2150 4125 2150
+Wire Wire Line
+	4125 2150 4125 2900
+Wire Wire Line
+	3075 2250 4075 2250
+Wire Wire Line
+	4075 2250 4075 3000
+Wire Wire Line
+	3075 2350 4025 2350
+Wire Wire Line
+	4025 2350 4025 3100
+Wire Wire Line
+	3075 2450 3975 2450
+Wire Wire Line
+	3975 2450 3975 3200
+Wire Wire Line
+	3075 2550 3925 2550
+Wire Wire Line
+	3925 2550 3925 3300
+Wire Wire Line
+	3075 2650 3875 2650
+Wire Wire Line
+	3875 2650 3875 3400
+Wire Wire Line
+	3075 2750 3825 2750
+Wire Wire Line
+	3825 2750 3825 3500
+Wire Wire Line
+	3075 4150 3825 4150
+Wire Wire Line
+	3825 4150 3825 3600
+Wire Wire Line
+	3075 4250 3875 4250
+Wire Wire Line
+	3875 4250 3875 3700
+Wire Wire Line
+	3075 4350 3925 4350
+Wire Wire Line
+	3925 4350 3925 3800
+Wire Wire Line
+	3075 4450 3975 4450
+Wire Wire Line
+	3975 4450 3975 3900
+Wire Wire Line
+	3075 4550 4025 4550
+Wire Wire Line
+	4025 4550 4025 4000
+Wire Wire Line
+	3075 4650 4075 4650
+Wire Wire Line
+	4075 4650 4075 4100
+Wire Wire Line
+	3075 4750 4125 4750
+Wire Wire Line
+	4125 4750 4125 4200
+Wire Wire Line
+	6225 3950 6075 3950
+Connection ~ 2025 4450
+$Comp
+L Arduino:Arduino_Uno_Shield XA1
+U 1 1 5D6C6480
+P 7525 4100
+F 0 "XA1" H 7525 5487 60  0000 C CNN
+F 1 "Arduino_Uno_Shield" H 7525 5381 60  0000 C CNN
+F 2 "Arduino:Arduino_Uno_Shield" H 9325 7850 60  0001 C CNN
+F 3 "https://store.arduino.cc/arduino-uno-rev3" H 9325 7850 60  0001 C CNN
+	1    7525 4100
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	2275 2050 2175 2050
+Wire Wire Line
+	2175 2050 2175 1700
+Wire Wire Line
+	2075 2250 2075 1575
+Wire Wire Line
+	2075 1575 6075 1575
+Wire Wire Line
+	6075 1575 6075 3950
+Connection ~ 2075 2250
+Text Label 5725 1575 0    50   ~ 0
+SCLK
+Text Label 5725 1700 0    50   ~ 0
+SER
+Wire Wire Line
+	2275 2550 2175 2550
+Wire Wire Line
+	2175 2550 2175 4650
+Wire Wire Line
+	2175 5675 5975 5675
+Wire Wire Line
+	5975 5675 5975 4050
+Wire Wire Line
+	5975 4050 6225 4050
+Text Label 4225 5675 0    50   ~ 0
+RCLK
+Wire Wire Line
+	2025 5800 6075 5800
+Wire Wire Line
+	6075 5800 6075 4150
+Wire Wire Line
+	6075 4150 6225 4150
+Wire Wire Line
+	2025 4450 2025 5800
+Text Label 4225 5800 0    50   ~ 0
+~CLR
+Text GLabel 9475 5050 2    50   Input ~ 0
+VCC
+Text GLabel 4900 2050 0    50   Input ~ 0
+VCC
+Text GLabel 2675 1200 0    50   Input ~ 0
+VCC
+$Comp
+L Device:C C1
+U 1 1 5D770C8B
+P 2825 1200
+F 0 "C1" V 2573 1200 50  0000 C CNN
+F 1 "100nF" V 2664 1200 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 2863 1050 50  0001 C CNN
+F 3 "~" H 2825 1200 50  0001 C CNN
+	1    2825 1200
+	0    1    1    0   
+$EndComp
+Text GLabel 2975 1200 2    50   Input ~ 0
+GND
+$Comp
+L Device:C C3
+U 1 1 5D775E20
+P 5050 2125
+F 0 "C3" V 4950 2225 50  0000 C CNN
+F 1 "100nF" V 5125 2300 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5088 1975 50  0001 C CNN
+F 3 "~" H 5050 2125 50  0001 C CNN
+	1    5050 2125
+	0    1    1    0   
+$EndComp
+Text GLabel 5450 2125 2    50   Input ~ 0
+GND
+Text GLabel 2675 5400 2    50   Input ~ 0
+GND
+$Comp
+L Device:C C2
+U 1 1 5D77D058
+P 2825 3850
+F 0 "C2" V 2573 3850 50  0000 C CNN
+F 1 "100nF" V 2664 3850 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 2863 3700 50  0001 C CNN
+F 3 "~" H 2825 3850 50  0001 C CNN
+	1    2825 3850
+	0    1    1    0   
+$EndComp
+Connection ~ 2675 3850
+Wire Wire Line
+	2675 3850 2675 3950
+Text GLabel 2675 3750 1    50   Input ~ 0
+VCC
+Text GLabel 2675 3250 2    50   Input ~ 0
+GND
+Text GLabel 2975 3850 2    50   Input ~ 0
+GND
+Text GLabel 9050 4750 2    50   Input ~ 0
+GND
+Wire Wire Line
+	8825 4650 8950 4650
+Wire Wire Line
+	8950 4650 8950 4750
+Wire Wire Line
+	8825 4750 8950 4750
+Connection ~ 8950 4750
+Wire Wire Line
+	8950 4850 8825 4850
+Wire Wire Line
+	8950 4750 8950 4850
+Wire Wire Line
+	8950 4750 9050 4750
+Wire Wire Line
+	2275 4650 2175 4650
+Connection ~ 2175 4650
+Wire Wire Line
+	2175 4650 2175 5675
+Wire Wire Line
+	8950 4050 8825 4050
+Wire Wire Line
+	9025 4150 8825 4150
+Wire Wire Line
+	9100 4250 8825 4250
+Text Label 6650 1950 0    50   ~ 0
+~CE
+Text Label 6650 1850 0    50   ~ 0
+~OE
+Text Label 6650 1750 0    50   ~ 0
+~WE
+Wire Wire Line
+	2675 1200 2675 1850
+Wire Wire Line
+	2275 2650 1950 2650
+Wire Wire Line
+	1950 2650 1950 1450
+Wire Wire Line
+	1950 1450 9175 1450
+Wire Wire Line
+	9175 1450 9175 3950
+Wire Wire Line
+	9175 3950 8825 3950
+Wire Wire Line
+	1950 2650 1950 4750
+Wire Wire Line
+	1950 4750 2275 4750
+Connection ~ 1950 2650
+Text Label 5725 1450 0    50   ~ 0
+~SOE
+Text Label 5375 2350 0    50   ~ 0
+IO0
+Text Label 5375 2450 0    50   ~ 0
+IO1
+Text Label 5375 2550 0    50   ~ 0
+IO2
+Text Label 5375 2650 0    50   ~ 0
+IO3
+Text Label 5375 2750 0    50   ~ 0
+IO4
+Text Label 5375 2850 0    50   ~ 0
+IO5
+Text Label 5375 2950 0    50   ~ 0
+IO6
+Text Label 5375 3050 0    50   ~ 0
+IO7
+Text GLabel 7150 2500 2    50   Input ~ 0
+GND
+NoConn ~ 8825 3050
+NoConn ~ 8825 3150
+NoConn ~ 8825 3350
+NoConn ~ 8825 3450
+NoConn ~ 8825 3750
+NoConn ~ 8825 4350
+NoConn ~ 8825 4950
+NoConn ~ 6225 5150
+NoConn ~ 6225 5050
+NoConn ~ 6225 4850
+NoConn ~ 6225 4750
+NoConn ~ 6225 4650
+NoConn ~ 6225 4550
+NoConn ~ 6225 4450
+NoConn ~ 6225 4350
+NoConn ~ 3075 4850
+NoConn ~ 3075 5050
+NoConn ~ 8825 5150
+$Comp
+L power:PWR_FLAG #FLG01
+U 1 1 5D86E021
+P 9200 5050
+F 0 "#FLG01" H 9200 5125 50  0001 C CNN
+F 1 "PWR_FLAG" H 9200 5223 50  0000 C CNN
+F 2 "" H 9200 5050 50  0001 C CNN
+F 3 "~" H 9200 5050 50  0001 C CNN
+	1    9200 5050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8825 5050 9200 5050
+Wire Wire Line
+	9200 5050 9475 5050
+Connection ~ 9200 5050
+Wire Wire Line
+	4900 2050 4900 2125
+Wire Wire Line
+	4900 2125 4900 2200
+Connection ~ 4900 2125
+Wire Wire Line
+	4175 2050 4175 2800
+Wire Wire Line
+	4175 2800 4500 2800
+Wire Wire Line
+	4125 2900 4500 2900
+Wire Wire Line
+	4075 3000 4500 3000
+Wire Wire Line
+	4025 3100 4500 3100
+Wire Wire Line
+	3975 3200 4500 3200
+Wire Wire Line
+	3925 3300 4500 3300
+Wire Wire Line
+	3875 3400 4500 3400
+Wire Wire Line
+	3825 3500 4500 3500
+Wire Wire Line
+	3825 3600 4500 3600
+Wire Wire Line
+	3875 3700 4500 3700
+Wire Wire Line
+	3925 3800 4500 3800
+Wire Wire Line
+	3975 3900 4500 3900
+Wire Wire Line
+	4025 4000 4500 4000
+Wire Wire Line
+	4075 4100 4500 4100
+Wire Wire Line
+	4125 4200 4500 4200
+$Comp
+L eeprom:AT28C256_40PIN_ZIF U3
+U 1 1 5D886730
+P 4900 3000
+F 0 "U3" H 4700 3750 50  0000 C CNN
+F 1 "AT28C256_40PIN_ZIF" H 5375 1450 50  0000 C CNN
+F 2 "Socket:DIP_Socket-40_W11.9_W12.7_W15.24_W17.78_W18.5_3M_240-1280-00-0602J" H 5300 3700 50  0001 C CNN
+F 3 "" H 5300 3700 50  0001 C CNN
+	1    4900 3000
+	1    0    0    -1  
+$EndComp
+Text GLabel 4900 4700 2    50   Input ~ 0
+GND
+Wire Wire Line
+	4900 4550 4900 4700
+Wire Wire Line
+	4500 2550 4225 2550
+Wire Wire Line
+	4225 2550 4225 1750
+Wire Wire Line
+	4225 1750 9100 1750
+Wire Wire Line
+	9100 1750 9100 4250
+Wire Wire Line
+	4500 2450 4275 2450
+Wire Wire Line
+	4275 2450 4275 1850
+Wire Wire Line
+	4275 1850 9025 1850
+Wire Wire Line
+	9025 1850 9025 4150
+Wire Wire Line
+	4500 2350 4325 2350
+Wire Wire Line
+	4325 2350 4325 1950
+Wire Wire Line
+	4325 1950 8950 1950
+Wire Wire Line
+	8950 1950 8950 4050
+Wire Wire Line
+	5250 2350 5900 2350
+Wire Wire Line
+	5900 2350 5900 3050
+Wire Wire Line
+	5900 3050 6225 3050
+Wire Wire Line
+	5250 2450 5850 2450
+Wire Wire Line
+	5850 2450 5850 3150
+Wire Wire Line
+	5850 3150 6225 3150
+Wire Wire Line
+	5250 2550 5800 2550
+Wire Wire Line
+	5800 2550 5800 3250
+Wire Wire Line
+	5800 3250 6225 3250
+Wire Wire Line
+	5250 2650 5750 2650
+Wire Wire Line
+	5750 2650 5750 3350
+Wire Wire Line
+	5750 3350 6225 3350
+Wire Wire Line
+	5250 2750 5700 2750
+Wire Wire Line
+	5700 2750 5700 3450
+Wire Wire Line
+	5700 3450 6225 3450
+Wire Wire Line
+	5250 2850 5650 2850
+Wire Wire Line
+	5650 2850 5650 3550
+Wire Wire Line
+	5650 3550 6225 3550
+Wire Wire Line
+	5250 2950 5600 2950
+Wire Wire Line
+	5600 2950 5600 3650
+Wire Wire Line
+	5600 3650 6225 3650
+Wire Wire Line
+	5250 3050 5550 3050
+Wire Wire Line
+	5550 3050 5550 3750
+Wire Wire Line
+	5550 3750 6225 3750
+Wire Wire Line
+	5200 2125 5450 2125
+Wire Wire Line
+	6225 3850 6175 3850
+Wire Wire Line
+	6175 3850 6175 2500
+Wire Wire Line
+	6175 2500 6300 2500
+Wire Wire Line
+	6400 1700 6400 2050
+Wire Wire Line
+	6400 2050 8875 2050
+Wire Wire Line
+	8875 2050 8875 3850
+Wire Wire Line
+	8875 3850 8825 3850
+Wire Wire Line
+	2175 1700 6400 1700
+Text Label 6175 2500 0    50   ~ 0
+LED
+$EndSCHEMATC
