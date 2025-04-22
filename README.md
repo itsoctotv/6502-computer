@@ -10,6 +10,9 @@ For monitoring the I/O lines etc. of the 6502 I use a Arduino Mega programmed as
 
 For the clock I currently use the [555 style clock](https://eater.net/schematics/clock.png) but later I will be using a 1MHz oscillator clock   
 
+### current task
+- waiting for the W65C22 I/O Adapter to arrive and the custom PCBs for the EEPROM programmer 
 _some pics/references can be found [here](docs/misc/)_  
+
 
 **WIP**   
