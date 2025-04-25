@@ -8,8 +8,9 @@ For the EEPROM Programmer (because they cost an arm and a leg) I built the Ardui
     
 For monitoring the I/O lines etc. of the 6502 I use a Arduino Mega programmed as a monitor device [here](6502-monitor/) (which is also way cheaper than a logic analyzer).    
 
-For the clock I currently use the [555 style clock](https://eater.net/schematics/clock.png) but later I will be using a 1MHz oscillator clock   
+For the clock I currently use the [555 style clock](https://eater.net/schematics/clock.png) but later I will be using a 1MHz oscillator clock     
 
+6502 assembler used: [here](http://www.compilers.de/vasm.html)
 ### current task
 - waiting for the custom PCBs for the EEPROM programmer
 
