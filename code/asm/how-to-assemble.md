@@ -1,1 +1,1 @@
-vasm6502_oldstyle -Fbin program.s
+vasm6502_oldstyle -Fbin -dotdir program.s
