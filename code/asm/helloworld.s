@@ -29,7 +29,7 @@ reset:
   sta PORTA
 
   
-  lda #%00001111 	; Set display on, cursor on, blinking cursor on
+  lda #%00001110 	; Set display on, cursor on, blinking cursor off
   sta PORTB
   
   lda #0 			; Clear RS/RW/E bits
@@ -202,8 +202,35 @@ reset:
   lda #RS 			; set RS bit
   sta PORTA
 
-
+  
 loop:
+  ; blink display
+  lda #0 			; clear control 
+  sta PORTA
+
+  lda #%00001000 ; turn display off 
+  sta PORTB
+
+
+
+  lda #0
+  lda PORTA
+  lda #E
+  sta PORTA
+  lda #0
+  sta PORTA
+
+  lda #%00001100 ; turn display on
+  sta PORTB
+
+  lda #0
+  sta PORTA
+  lda #E
+  sta PORTA
+  
+  lda #0
+  sta PORTA
+  
   jmp loop
 
 
