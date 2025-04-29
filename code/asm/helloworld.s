@@ -8,8 +8,9 @@ RW = %01000000 		; Read Write Signal
 RS = %00100000 		; Register Select Signal
 
   .org $8000 		; origin of where the code goes in memory 
+  
 reset:
-  ldx #$ff          ; loda 0xff to the X register
+  ldx #$ff          ; load 0xff to the X register
   txs				; transfer the X register contents to the stack pointer
   					; init the stackpointer to the address FF, the range of the 
   					; stack pointer is 0x100 - 0x1FF  
@@ -39,7 +40,47 @@ reset:
   jsr sendLCDInstruction
 
 ; END reset
+; BEGIN
+; -------
 
+  jsr printHelloWorld
+
+
+
+loop:
+  jmp loop
+; -----
+; END PROGRAM
+
+  
+
+sendLCDInstruction:
+  sta PORTB
+  
+  lda #0 			; Clear RS/RW/E bits
+  sta PORTA
+
+  lda #E 			; Set Enable bit to send instruction
+  sta PORTA
+
+  lda #0 			; Clear RS/RW/E bits
+  sta PORTA
+  rts				; return from subroutine 
+
+printCharLCD:
+  sta PORTB
+  
+  lda #RS 			; set RS bit 
+  sta PORTA
+
+  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
+  sta PORTA
+
+  lda #RS 			; set RS bit
+  sta PORTA
+  rts
+
+printHelloWorld: 
   ; RS is HIGH -> sending data
 
   lda #"H"			  ; will automatically load the ascii value
@@ -78,39 +119,14 @@ reset:
   lda #"d"			  
   jsr printCharLCD
 
-  lda #"!"			  
+  lda #"1"			  
   jsr printCharLCD
-
+  lda #"2"			  
+  jsr printCharLCD
+  lda #"3"			  
+  jsr printCharLCD
   
-loop:
-  jmp loop
-
-sendLCDInstruction:
-  sta PORTB
-  
-  lda #0 			; Clear RS/RW/E bits
-  sta PORTA
-
-  lda #E 			; Set Enable bit to send instruction
-  sta PORTA
-
-  lda #0 			; Clear RS/RW/E bits
-  sta PORTA
-  rts				; return from subroutine 
-
-printCharLCD:
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
   rts
-
   
   .org $fffc ; set the reset vector for the 
   .word reset
