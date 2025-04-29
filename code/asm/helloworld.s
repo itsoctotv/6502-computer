@@ -9,40 +9,78 @@ RS = %00100000 		; Register Select Signal
 
   .org $8000 		; origin of where the code goes in memory 
 reset:
+  ldx #$ff          ; loda 0xff to the X register
+  txs				; transfer the X register contents to the stack pointer
+  					; init the stackpointer to the address FF, the range of the 
+  					; stack pointer is 0x100 - 0x1FF  
+  
   lda #%11111111 	; init interface adapter, set all PORTB pins to output
   sta DDRB
 
   lda #%11100000 	; Set top three PORTA pins as output, used to control the LCD
   sta DDRA
+
+  
   ; LCD init----------
   ; RS is LOW -> sending instructions
+
+  
   lda #%00111000 	; Set 8bit mode, 2line display, 5x8 font
-  sta PORTB
-  
-  lda #0 			; Clear RS/RW/E bits
-  sta PORTA
-
-  lda #E 			; Set Enable bit to send instruction
-  sta PORTA
-
-  lda #0 			; Clear RS/RW/E bits
-  sta PORTA
-
-  
+  jsr sendLCDInstruction ; jump to subroutine-> send the instruction 
+ 
   lda #%00001110 	; Set display on, cursor on, blinking cursor off
-  sta PORTB
-  
-  lda #0 			; Clear RS/RW/E bits
-  sta PORTA
-
-  lda #E 			; Set Enable bit to send instruction
-  sta PORTA
-
-  lda #0 			; Clear RS/RW/E bits
-  sta PORTA
+  jsr sendLCDInstruction
   
 
   lda #%00000110 	; Increment and shift cursor, don't shift display
+  jsr sendLCDInstruction
+
+  ; RS is HIGH -> sending data
+
+  lda #"H"			  ; will automatically load the ascii value
+  jsr printCharLCD
+
+  lda #"e"			  
+  jsr printCharLCD
+
+  lda #"l"			  
+  jsr printCharLCD
+
+  lda #"l"			  
+  jsr printCharLCD
+
+  lda #"o"			  
+  jsr printCharLCD
+
+  lda #","			  
+  jsr printCharLCD
+
+  lda #" "			  
+  jsr printCharLCD
+
+  lda #"w"			  
+  jsr printCharLCD
+
+  lda #"o"			  
+  jsr printCharLCD
+
+  lda #"r"			  
+  jsr printCharLCD
+
+  lda #"l"			  
+  jsr printCharLCD
+
+  lda #"d"			  
+  jsr printCharLCD
+
+  lda #"!"			  
+  jsr printCharLCD
+
+  
+loop:
+  jmp loop
+
+sendLCDInstruction:
   sta PORTB
   
   lda #0 			; Clear RS/RW/E bits
@@ -53,10 +91,9 @@ reset:
 
   lda #0 			; Clear RS/RW/E bits
   sta PORTA
+  rts				; return from subroutine 
 
-  ; RS is HIGH -> sending data
-
-  lda #"H"			; will load the ascii value automatically 
+printCharLCD:
   sta PORTB
   
   lda #RS 			; set RS bit 
@@ -67,175 +104,9 @@ reset:
 
   lda #RS 			; set RS bit
   sta PORTA
-
-  lda #"e"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-
-  lda #"l"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"l"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"o"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #","			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #" "			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"w"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"o"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"r"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"l"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"d"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
-  lda #"!"			; will load the ascii value automatically 
-  sta PORTB
-  
-  lda #RS 			; set RS bit 
-  sta PORTA
-
-  lda #(RS | E) 	; Set Enable bit to send instruction and set RS bit
-  sta PORTA
-
-  lda #RS 			; set RS bit
-  sta PORTA
+  rts
 
   
-loop:
-  ; blink display
-  lda #0 			; clear control 
-  sta PORTA
-
-  lda #%00001000 ; turn display off 
-  sta PORTB
-
-
-
-  lda #0
-  lda PORTA
-  lda #E
-  sta PORTA
-  lda #0
-  sta PORTA
-
-  lda #%00001100 ; turn display on
-  sta PORTB
-
-  lda #0
-  sta PORTA
-  lda #E
-  sta PORTA
-  
-  lda #0
-  sta PORTA
-  
-  jmp loop
-
-
-
- 
   .org $fffc ; set the reset vector for the 
   .word reset
   .word $0000

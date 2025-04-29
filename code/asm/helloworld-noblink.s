@@ -204,7 +204,37 @@ reset:
 
   
 loop:
+  ; blink display
+  lda #0 			; clear control 
+  sta PORTA
+
+  lda #%00001000 ; turn display off 
+  sta PORTB
+
+
+
+  lda #0
+  lda PORTA
+  lda #E
+  sta PORTA
+  lda #0
+  sta PORTA
+
+  lda #%00001100 ; turn display on
+  sta PORTB
+
+  lda #0
+  sta PORTA
+  lda #E
+  sta PORTA
+  
+  lda #0
+  sta PORTA
+  
   jmp loop
+
+
+
  
   .org $fffc ; set the reset vector for the 
   .word reset
