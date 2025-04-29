@@ -12,7 +12,7 @@ For the clock I currently use the [555 style clock](https://eater.net/schematics
 
 6502 assembler used: [here](http://www.compilers.de/vasm.html)
 ### current task
-- waiting for the custom PCBs for the EEPROM programmer
+- SRAM
 
 ---
 _some pics/references can be found [here](docs/misc/)_  
