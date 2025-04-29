@@ -35,6 +35,11 @@ reset:
   lda #%00000110 	; Increment and shift cursor, don't shift display
   jsr sendLCDInstruction
 
+  lda #%00000001 	; clear display when reset
+  jsr sendLCDInstruction
+
+; END reset
+
   ; RS is HIGH -> sending data
 
   lda #"H"			  ; will automatically load the ascii value
