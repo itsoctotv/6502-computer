@@ -11,9 +11,8 @@ For monitoring the I/O lines etc. of the 6502 I use a Arduino Mega programmed as
 For the clock I currently use the [555 style clock](https://eater.net/schematics/clock.png) but later I will be using a 1MHz oscillator clock     
 
 6502 assembler used: [here](http://www.compilers.de/vasm.html)
-### current task
-- SRAM
 
+[timing is complicated](https://www.youtube.com/watch?v=i_wrxBdXTgM)
 ---
 _some pics/references can be found [here](docs/misc/)_  
 
