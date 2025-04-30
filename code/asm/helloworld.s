@@ -119,11 +119,11 @@ printHelloWorld:
   lda #"d"			  
   jsr printCharLCD
 
-  lda #"1"			  
+  lda #"0"			  
   jsr printCharLCD
-  lda #"2"			  
+  lda #"0"			  
   jsr printCharLCD
-  lda #"3"			  
+  lda #"0"			  
   jsr printCharLCD
   
   rts

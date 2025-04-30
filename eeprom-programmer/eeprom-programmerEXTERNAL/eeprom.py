@@ -30,7 +30,6 @@ from typing import IO
 from serial import Serial
 from serial.tools import list_ports
 
-
 def atoi(val: str) -> int:
     """Parses an address string into an integer.
 
@@ -40,7 +39,6 @@ def atoi(val: str) -> int:
                16 if val.startswith('0x') else
                8 if val.startswith('0o') else
                10)
-
 
 class AT28C256(object):
     usage = """AT28C256 EEPROM Programmer
@@ -144,17 +142,15 @@ Address supports hex (0xFF) and octal (0o7) notation.
     def fload(self, f: IO, size: int, console=sys.stdout) -> None:
         self._send(pack('>cH', b'l', size), ack=True)
 
-        with open('fload.bin', 'wb') as fout:
-            cnt = 0
-            while True:
-                data = f.read(min(self.MAXPAYLOAD, size - cnt))
-                if not data:
-                    break
-                cnt += len(data)
-                self._send(data, ack=True)
-                fout.write(data)
-                if console:
-                    print('\r%d%%' % ((cnt * 100) / size), end='', file=console)
+        cnt = 0
+        while True:
+            data = f.read(min(self.MAXPAYLOAD, size - cnt))
+            if not data:
+                break
+            cnt += len(data)
+            self._send(data, ack=True)
+            if console:
+                print('\r%d%%' % ((cnt * 100) / size), end='', file=console)
 
         if console:
             print('\nComplete.', file=console)
@@ -174,11 +170,6 @@ Address supports hex (0xFF) and octal (0o7) notation.
         EEPROM which is then in turn read back and diffed against the original
         data.
         """
-        # TODO: A better test might be a 2-pass process, first writing all
-        #       zeros and reading them back, followed by writing all ones and
-        #       reading that back too. This is guaranteed to flip every bit at
-        #       least once.
-        #       If either test fails, start "hexdump | less" and abort.
         size = int(size)
         data = BytesIO()
         for c in islice(self._rnd(), size):
@@ -232,7 +223,6 @@ Address supports hex (0xFF) and octal (0o7) notation.
             except (ValueError, KeyError, IndexError, TypeError) as e:
                 print('Invalid command:', e)
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(sys.argv[0],
                                      description='AT28C256 EEPROM Programmer')
@@ -255,7 +245,6 @@ if __name__ == '__main__':
     dev = args.port
     if not args.port:
         try:
-            # attempt to autodetect the Arduino
             dev = next(
                 filter(lambda p: p.product and 'arduino' in p.product.lower() or
                        p.manufacturer and 'arduino' in p.manufacturer.lower(),
@@ -271,7 +260,6 @@ if __name__ == '__main__':
         if args.cmd == 'dump':
             eeprom.fdump(sys.stdout.buffer, size=args.size, console=None)
         elif args.cmd == 'load':
-            # eagerly read all of stdin to determine the ROM size
             with BytesIO() as f:
                 f.write(sys.stdin.buffer.read(0x8000))
                 size = f.tell()
@@ -284,11 +272,9 @@ if __name__ == '__main__':
             histfile = os.path.join(os.path.expanduser("~"), ".eeprom_history")
             try:
                 readline.read_history_file(histfile)
-                # default history len is -1 (infinite), which may grow unruly
                 readline.set_history_length(1000)
             except FileNotFoundError:
                 pass
-
             atexit.register(readline.write_history_file, histfile)
             eeprom.repl()
     except (KeyboardInterrupt, BrokenPipeError):
