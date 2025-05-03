@@ -293,3 +293,4 @@ if __name__ == '__main__':
             eeprom.repl()
     except (KeyboardInterrupt, BrokenPipeError):
         eeprom.reset()
+

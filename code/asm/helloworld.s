@@ -14,6 +14,8 @@ reset:
   txs				; transfer the X register contents to the stack pointer
   					; init the stackpointer to the address FF, the range of the 
   					; stack pointer is 0x100 - 0x1FF  
+
+
   
   lda #%11111111 	; init interface adapter, set all PORTB pins to output
   sta DDRB
@@ -43,7 +45,17 @@ reset:
 ; BEGIN
 ; -------
 
-  jsr printHelloWorld
+
+
+  ldx #0 			; set the X register to 0, use it as a count
+					; at the end of the message .asciiz string there is a 0-byte,
+					; which will set the Zero flag when LDA is called -> branch-if-equal -> to the main loop (infinite)
+writeMessage:
+  lda message,x		; load char with x register as in msg + 1, msg + 2 etc
+  beq loop			
+  jsr printCharLCD  
+  inx				; increment the x register
+  jmp writeMessage
 
 
 
@@ -52,9 +64,36 @@ loop:
 ; -----
 ; END PROGRAM
 
-  
+
+message: .asciiz "  Hello World!                           6502-Computer!"
+
+
+
+
+checkLCDBusy:
+  pha 				; push the given instruction value of the A register to the stack
+  lda #%00000000 	; set portB as input
+  sta DDRB
+lcdBusy:
+  lda #RW
+  sta PORTA
+  lda #(RW | E)
+  sta PORTA
+  lda PORTB
+  and #%10000000	; get the busy flag of LCD
+  bne lcdBusy		; stay in the loop while the busy flag is not set
+
+  lda #RW			; clear up 
+  sta PORTA
+
+  lda #%11111111 	; set portB to output again
+  sta DDRB
+  pla 				; pull value off the stack 
+  rts
+
 
 sendLCDInstruction:
+  jsr checkLCDBusy
   sta PORTB
   
   lda #0 			; Clear RS/RW/E bits
@@ -68,8 +107,10 @@ sendLCDInstruction:
   rts				; return from subroutine 
 
 printCharLCD:
+  jsr checkLCDBusy
   sta PORTB
-  
+    ; RS is HIGH -> sending data
+
   lda #RS 			; set RS bit 
   sta PORTA
 
@@ -80,53 +121,7 @@ printCharLCD:
   sta PORTA
   rts
 
-printHelloWorld: 
-  ; RS is HIGH -> sending data
 
-  lda #"H"			  ; will automatically load the ascii value
-  jsr printCharLCD
-
-  lda #"e"			  
-  jsr printCharLCD
-
-  lda #"l"			  
-  jsr printCharLCD
-
-  lda #"l"			  
-  jsr printCharLCD
-
-  lda #"o"			  
-  jsr printCharLCD
-
-  lda #","			  
-  jsr printCharLCD
-
-  lda #" "			  
-  jsr printCharLCD
-
-  lda #"w"			  
-  jsr printCharLCD
-
-  lda #"o"			  
-  jsr printCharLCD
-
-  lda #"r"			  
-  jsr printCharLCD
-
-  lda #"l"			  
-  jsr printCharLCD
-
-  lda #"d"			  
-  jsr printCharLCD
-
-  lda #"1"			  
-  jsr printCharLCD
-  lda #"2"			  
-  jsr printCharLCD
-  lda #"3"			  
-  jsr printCharLCD
-  
-  rts
   
   .org $fffc ; set the reset vector for the 
   .word reset
