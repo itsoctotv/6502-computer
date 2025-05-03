@@ -121,55 +121,6 @@ printCharLCD:
   sta PORTA
   rts
 
-
-<<<<<<< HEAD
-=======
-  lda #"H"			  ; will automatically load the ascii value
-  jsr printCharLCD
-
-  lda #"e"			  
-  jsr printCharLCD
-
-  lda #"l"			  
-  jsr printCharLCD
-
-  lda #"l"			  
-  jsr printCharLCD
-
-  lda #"o"			  
-  jsr printCharLCD
-
-  lda #","			  
-  jsr printCharLCD
-
-  lda #" "			  
-  jsr printCharLCD
-
-  lda #"w"			  
-  jsr printCharLCD
-
-  lda #"o"			  
-  jsr printCharLCD
-
-  lda #"r"			  
-  jsr printCharLCD
-
-  lda #"l"			  
-  jsr printCharLCD
-
-  lda #"d"			  
-  jsr printCharLCD
-
-  lda #"0"			  
-  jsr printCharLCD
-  lda #"0"			  
-  jsr printCharLCD
-  lda #"0"			  
-  jsr printCharLCD
-  
-  rts
->>>>>>> a126ebd2661e33a46c3d43e2acf9a7d8fc12edf4
-  
   .org $fffc ; set the reset vector for the 
   .word reset
   .word $0000
