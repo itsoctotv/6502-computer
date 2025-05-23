@@ -28,13 +28,14 @@ reset:
   					; init the stackpointer to the address FF, the range of the 
   					; stack pointer is 0x100 - 0x1FF  
   
-
+  lda #%00000001	; set rising edge PCR
+  sta PCR
+  
   lda #%10000010	; Set CA1 interrupt enable
   sta IER
 
-  lda #%00000000	; Set defaults to PCR
-  sta PCR
   cli
+  
   
   lda #%11111111 	; init interface adapter, set all PORTB pins to output
   sta DDRB
@@ -63,9 +64,11 @@ reset:
   lda #0
   sta counter
   sta counter + 1
+  
 loop:
-  lda #%00000010 	; home cursor, overrite what was there before 
+  lda #%00000010
   jsr sendLCDInstruction
+
 
   
   lda #0
@@ -245,20 +248,17 @@ printCharLCD:
   sta PORTB
   rts
 
-nmi:  
+
 irq:
-  
-  inc counter
-  bne exitIRQ		; 2byte counter
-  inc counter + 1   ; inc next byte 
-exitIRQ:
-
-  
-  bit PORTA			; bitwise test -> triggers read from PORTA -> clears interrupt bi
-
+  pha
+  lda PORTA
+  sta counter
+  pla
   rti
 
-  
+nmi: 
+   rti  
+
   .org $fffa
   .word nmi         ; set non maskable interrupt
   .word reset       ; set the reset vector
