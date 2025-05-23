@@ -15,6 +15,12 @@ message2 = $0204	; 6bytes
 
 
 
+
+
+
+
+
+
   .org $8000 		; origin of where the code goes in memory 
   
 reset:
@@ -46,9 +52,12 @@ reset:
   lda #%00000110 	; Increment and shift cursor, don't shift display
   jsr sendLCDInstruction
 
-  lda #%00000001 	; clear display when reset
+  lda #%00000001 	; clear display 
   jsr sendLCDInstruction
+  
 
+
+  
   lda #0
   sta message2
 
@@ -56,7 +65,7 @@ reset:
 ; BEGIN
 ; -------
 
-  ; init value to be number to convert
+  ; init value to be number to convert, print 16bit counter to LCD
   lda number
   sta value
   lda number + 1
@@ -115,9 +124,7 @@ writeMessage:
   inx				; increment the x register
   jmp writeMessage
 
-
 loop:
-
   jmp loop
   
 number: .word 1738
@@ -198,6 +205,9 @@ printCharLCD:
   sta PORTA
   rts
 
-  .org $fffc ; set the reset vector for the 
-  .word reset
-  .word $0000
+
+
+  
+  .org $fffc
+  .word reset       ; set the reset vector
+  .word #0000  
