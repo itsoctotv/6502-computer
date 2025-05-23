@@ -128,7 +128,7 @@ ignoreResult:
 					; at the end of the message .asciiz string there is a 0-byte,
 					; which will set the Zero flag when LDA is called -> branch-if-equal -> to the main loop (infinite)
 writeMessage:
-  lda message2,x		; load char with x register as in msg + 1, msg + 2 etc
+  lda message,x		; load char with x register as in msg + 1, msg + 2 etc
   beq loop			
   jsr printCharLCD  
   inx				; increment the x register
