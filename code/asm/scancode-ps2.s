@@ -11,14 +11,11 @@ E  = %01000000 		; Enable Signal
 RW = %00100000 		; Read Write Signal
 RS = %00010000 		; Register Select Signal
 
-kbWptr = $0000 		; keyboard write pointer
-kbRptr = $0001 		; keyboard read pointer
-kbFlags = $0002
-
-RELEASE = %00000001
-SHIFT   = %00000010
-
-kbBuffer = $0200 	; 256byte keyboard buffer 0200-02ff in memory
+; binary to decimal 
+value = $0200		; 2bytes
+mod10 = $0202       ; 2bytes
+message2 = $0204	; 6bytes
+counter = $020a		; 2bytes
 
 
 
@@ -64,30 +61,69 @@ reset:
   lda #%00000001 	; clear display 
   jsr sendLCDInstruction
 
+  lda #0
+  sta counter
+  sta counter + 1
   
-  lda #$00
-  sta kbWptr
-  sta kbRptr
-  sta kbFlags
+loop:
+  lda #%00000010
+  jsr sendLCDInstruction
+
+
+  
+  lda #0
+  sta message2
 
 ; END reset
 ; BEGIN
 ; -------
 
-loop:
-  sei
-  lda kbRptr		; load read pointer value, compare with write pointer value > branch to keypressed otherwise loop through
-  cmp kbWptr
-  cli
-  bne keyPressed
-  jmp loop
+  ; init value to be number to convert, print 16bit counter to LCD
+  lda counter
+  sta value
+  lda counter + 1
+  sta value + 1
+divide:
+  ; init remainder to be zero
+  lda #0
+  sta mod10
+  sta mod10 + 1
+  clc ; clear carry bit
 
-keyPressed:
-  ldx kbRptr		; load Read pointer to X register and use as an index to buffer-> print a char 
-  lda kbBuffer, x
-  jsr printCharLCD
-  inc kbRptr
-  jmp loop
+
+  ldx #16
+divloop:
+  ; rotate quotient of remainder
+  rol value
+  rol value + 1
+  rol mod10
+  rol mod10 + 1
+  ; A and Y = dividend - divisor
+  sec 
+  lda mod10
+  sbc #10
+  tay ; save low byte to Y register
+  lda mod10 + 1
+  sbc #0
+  bcc ignoreResult ; branch if dividend < divisor
+  sty mod10 
+  sta mod10 + 1
+  
+  
+ignoreResult:
+  dex
+  bne divloop
+  rol value ; shift in the last bit of the quotient
+  rol value + 1
+
+  lda mod10
+  clc
+  adc #"0"
+  jsr pushCharToString
+  ; if value != 0 -> continute dividing
+  lda value
+  ora value + 1
+  bne divide ; branch if value not zero
 
   
   ; print a string
@@ -95,13 +131,33 @@ keyPressed:
 					; at the end of the message .asciiz string there is a 0-byte,
 					; which will set the Zero flag when LDA is called -> branch-if-equal -> to the main loop (infinite)
 writeMessage:
-  lda message,x		; load char with x register as in msg + 1, msg + 2 etc
+  lda message2,x		; load char with x register as in msg + 1, msg + 2 etc
   beq loop			
   jsr printCharLCD  
   inx				; increment the x register
   jmp writeMessage
 
   
+number: .word 1738
+
+; Add the char in A registor to beginning of null-term string 'message2'
+pushCharToString:
+
+  pha ; push new first char onto stack
+  ldy #0 
+charLoop:
+  lda message2,y ; get char string, put into x
+  tax
+  pla 
+  sta message2,y ; pull char off stack and add it to the string
+  iny
+  txa
+  pha			 ; push char from string to stack
+  bne charLoop	 
+  pla 
+  sta message2,y ; pull the null off the stack and add to end of string
+
+  rts
 
 
 message: .asciiz " 6502-Computer! "
@@ -193,113 +249,15 @@ printCharLCD:
   rts
 
 
-irq:			  ; keyboard interrupt handler
+irq:
   pha
-  txa
-  pha
-
-  lda kbFlags
-  and #RELEASE	  ; check for key releases
-  beq readKey	  ; if not read key
-
-  lda kbFlags
-  eor #RELEASE	  ; flip release bit
-  sta kbFlags
-  lda PORTA		  ; read value thats being released
-  cmp #$12
-  beq shiftUp
-  cmp #$59 
-  beq shiftUp
-  
-  jmp exitIR
-
-shiftUp:
-  lda kbFlags
-  eor #SHIFT	  ; flip shift bit
-  sta kbFlags
-  jmp exitIR
-readKey:
   lda PORTA
-  cmp #$f0
-  beq keyRelease
-  cmp #$12		  ; left shift
-  beq shiftDown
-  cmp #$59		  ; right shift
-  beq shiftDown
-
-  tax
-  lda kbFlags
-  and #SHIFT
-  bne shiftedKey
-  
-  lda keymap, x	  ; map to char code
-  jmp pushKey
-  
-shiftedKey:
-  lda keymapShifted, x	  ; map to char code
-
-pushKey:
-  ldx kbWptr
-  sta kbBuffer, x
-  inc kbWptr
-  jmp exitIR
-  
-shiftDown:
-  lda kbFlags
-  ora #SHIFT
-  sta kbFlags
-  jmp exitIR
-  
-keyRelease:
-  lda kbFlags
-  ora #RELEASE
-  sta kbFlags
-exitIR:
-  pla 
-  tax
+  sta counter
   pla
   rti
 
 nmi: 
    rti  
-
-  .org $fe00
-keymap:
-  .byte "????????????? `?" ; 00-0F
-  .byte "?????q1???zsaw2?" ; 10-1F
-  .byte "?cxde43?? vftr5?" ; 20-2F
-  .byte "?nbhgy6???mju78?" ; 30-3F
-  .byte "?,kio09==./l;p-?" ; 40-4F
-  .byte "??'?[=?????]?\??" ; 50-5F
-  .byte "?????????1?47???" ; 60-6F
-  .byte "0.2568???+3-*9??" ; 70-7F
-  .byte "????????????????" ; 80-8F
-  .byte "????????????????" ; 90-9F
-  .byte "????????????????" ; A0-AF
-  .byte "????????????????" ; B0-BF
-  .byte "????????????????" ; C0-CF
-  .byte "????????????????" ; D0-DF
-  .byte "????????????????" ; E0-EF
-  .byte "????????????????" ; F0-FF
-
-  .org $fd00
-keymapShifted:
-  .byte "????????????? ~?" ; 00-0F
-  .byte "?????Q1???ZSAW@?" ; 10-1F
-  .byte "?CXDE#$?? VFTR%?" ; 20-2F
-  .byte "?NBHGY^???MJU&*?" ; 30-3F
-  .byte "?<KIO)(??>?L:P_?" ; 40-4F
-  .byte '??"?{+?????}?|??' ; 50-5F
-  .byte "?????????1?47???" ; 60-6F
-  .byte "0.2568???+3-*9??" ; 70-7F
-  .byte "????????????????" ; 80-8F
-  .byte "????????????????" ; 90-9F
-  .byte "????????????????" ; A0-AF
-  .byte "????????????????" ; B0-BF
-  .byte "????????????????" ; C0-CF
-  .byte "????????????????" ; D0-DF
-  .byte "????????????????" ; E0-EF
-  .byte "????????????????" ; F0-FF
 
   .org $fffa
   .word nmi         ; set non maskable interrupt
